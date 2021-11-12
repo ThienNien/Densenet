@@ -65,17 +65,23 @@ def main():
     ])
 
     kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
-    trainLoader = DataLoader(
-        dset.CIFAR10(root='cifar', train=True, download=True,
-                     transform=trainTransform),
-        batch_size=args.batchSz, shuffle=True, **kwargs)
-    testLoader = DataLoader(
-        dset.CIFAR10(root='cifar', train=False, download=True,
-                     transform=testTransform),
-        batch_size=args.batchSz, shuffle=False, **kwargs)
+    # trainLoader = DataLoader(
+    #     dset.CIFAR10(root='cifar', train=True, download=True,
+    #                  transform=trainTransform),
+    #     batch_size=args.batchSz, shuffle=True, **kwargs)
+    # testLoader = DataLoader(
+    #     dset.CIFAR10(root='cifar', train=False, download=True,
+    #                  transform=testTransform),
+    #     batch_size=args.batchSz, shuffle=False, **kwargs)
 
-    net = densenet.DenseNet(growthRate=12, depth=100, reduction=0.5,
-                            bottleneck=True, nClasses=10)
+    # net = densenet.DenseNet(growthRate=12, depth=100, reduction=0.5,
+    #                         bottleneck=True, nClasses=10)
+    dataset = AngleSteering(csv_file="C:\Users\tncup\Desktop\AI\car\Csv\data_angle",root_dir="C:\Users\tncup\Desktop\AI\car\Csv\data",transform=)
+
+    train_set,test_set = torch.utils.data.random_split(dataset,[,])
+
+    rain_loader = DataLoader(dataset = train_set,batch_size = batch_size, shuffle = True)
+    test_loader = DataLoader(dataset = test_set,batch_size = batch_size, shuffle = True)
 
     print('  + Number of params: {}'.format(
         sum([p.data.nelement() for p in net.parameters()])))
