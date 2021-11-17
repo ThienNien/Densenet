@@ -60,9 +60,9 @@ def main():
     args = parser.parse_args()
     if args.tensorboard: configure("runs/%s"%(args.name))
     
-    # Data loading code
-    normalize = transforms.Normalize(mean=[x/255.0 for x in [125.3, 123.0, 113.9]],
-                                     std=[x/255.0 for x in [63.0, 62.1, 66.7]])
+    # # Data loading code
+    #  normalize = transforms.Normalize(mean=[x/255.0 for x in [125.3, 123.0, 113.9]],
+    #                                  std=[x/255.0 for x in [63.0, 62.1, 66.7]])
     
     # if args.augment:
     #     transform_train = transforms.Compose([
@@ -90,12 +90,15 @@ def main():
     # val_loader = torch.utils.data.DataLoader(
     #     datasets.CIFAR10('../data', train=False, transform=transform_test),
     #     batch_size=args.batch_size, shuffle=True, **kwargs)
-    transform = transforms.Compose([
-        transforms.Resize(32),
-        transforms.ToTensor()
-    ])
-
-    dataset = AngleSteering(csv_file="C:\Users\tncup\Desktop\AI\car\Csv\data_angle",root_dir="C:\Users\tncup\Desktop\AI\car\Csv\data",transform= transform)
+    transform_re = transforms.Compose([
+            transforms.Resize(32),
+            transforms.Normalize(mean=[x/255.0 for x in [125.3, 123.0, 113.9]],
+                                     std=[x/255.0 for x in [63.0, 62.1, 66.7]]),
+            transforms.ToTensor()
+        ])
+    csv_path =r"C:\Users\tncup\Desktop\Densenet\data_angle.csv"
+    data = r"C:\Users\tncup\Desktop\Densenet\data"
+    dataset = AngleSteering(csv_file=csv_path,root_dir=data,transform=transform_re)
 
     train_set,test_set = torch.utils.data.random_split(dataset,[1028,400])
 
