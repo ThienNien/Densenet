@@ -30,8 +30,8 @@ img_size =[32,32]
 
 # Data
 print('==> Preparing data..')
-train_data = Image_Loader(root_path="./data1/data_angle.csv", image_size=img_size, transforms_data=True)
-test_data = Image_Loader_test(root_path="./data1/data_angle.csv", image_size=img_size, transforms_data=True)
+train_data = Image_Loader(root_path="./train_set.csv", image_size=img_size, transforms_data=True)
+test_data = Image_Loader_test(root_path="./test.csv", image_size=img_size, transforms_data=True)
 total_train_data = len(train_data)
 total_test_data = len(test_data)
 print('total_train_data:',total_train_data, 'total_test_data:',total_test_data)
