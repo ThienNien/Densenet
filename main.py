@@ -31,7 +31,7 @@ img_size =[32,32]
 # Data
 print('==> Preparing data..')
 train_data = Image_Loader(root_path="./train_set.csv", image_size=img_size, transforms_data=True)
-test_data = Image_Loader_test(root_path="./test.csv", image_size=img_size, transforms_data=True)
+test_data = Image_Loader_test(root_path="./test_set.csv", image_size=img_size, transforms_data=True)
 total_train_data = len(train_data)
 total_test_data = len(test_data)
 print('total_train_data:',total_train_data, 'total_test_data:',total_test_data)
@@ -73,6 +73,7 @@ def train(epoch):
         inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
         outputs = net(inputs)
+        targets = targets.type(torch.int64)
         loss = criterion(outputs, targets)
         loss.backward()
         optimizer.step()
@@ -96,6 +97,7 @@ def test(epoch):
         for batch_idx, (inputs, targets) in enumerate(testloader):
             inputs, targets = inputs.to(device), targets.to(device)
             outputs = net(inputs)
+            targets = targets.type(torch.int64)
             loss = criterion(outputs, targets)
 
             test_loss += loss.item()
