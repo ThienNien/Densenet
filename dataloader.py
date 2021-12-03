@@ -21,7 +21,7 @@ class Image_Loader(Dataset):
     def __getitem__(self, idx):
 
         # read the images from image path
-        image_path = os.path.join('data/',self.data_path.iloc[idx, 0])
+        image_path = os.path.join('datagangle/',self.data_path.iloc[idx, 0])
         image = Image.open(image_path)
         
         # read label
