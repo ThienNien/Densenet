@@ -17,6 +17,7 @@ from utils import progress_bar
 from dataloader import *
 from torch.utils.data import DataLoader
 
+import csv
 parser = argparse.ArgumentParser(description='PyTorch Custom Training')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
 parser.add_argument('--resume', '-r', action='store_true',
@@ -60,8 +61,9 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=args.lr,
                       momentum=0.9, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
-
-
+train_acc_list = []
+test_acc_list = []
+train_loss_list =[]
 # Training
 def train(epoch):
     print('\nEpoch: %d' % epoch)
@@ -85,7 +87,8 @@ def train(epoch):
 
         progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
-
+    train_acc_list.append(100.*correct/total)
+    train_loss_list.append((train_loss/(batch_idx+1))
 
 def test(epoch):
     global best_acc
@@ -110,6 +113,7 @@ def test(epoch):
 
     # Save checkpoint.
     acc = 100.*correct/total
+    test_acc_list.append(acc)
     if acc > best_acc:
         print('Saving..')
         state = {
@@ -123,7 +127,25 @@ def test(epoch):
         best_acc = acc
 
 
-for epoch in range(start_epoch, start_epoch+50):
+for epoch in range(start_epoch, start_epoch+5):
     train(epoch)
     test(epoch)
     scheduler.step()
+
+with open('train_acc.csv','r',newline='') as tr_file:
+    tr_writer = csv.writer(tr_file)
+    tr_writer.writerow(['Epoch','Accuracy'])
+    for item in train_acc_list:
+        tr_writer.writerow(item)
+
+with open('test_acc.csv','r',newline='') as t_file:
+    t_writer = csv.writer(t_file)
+    t_writer.writerow(['Epoch','Accuracy'])
+    for item in test_acc_list:
+        tr_writer.writerow(item)
+
+with open('train_loss.csv','r',newline='') as l_file:
+    l_writer = csv.writer(l_file)
+    l_writer.writerow(['Epoch','Loss'])
+    for item in train_loss_list:
+        l_writer.writerow(item)
