@@ -63,7 +63,7 @@ optimizer = optim.SGD(net.parameters(), lr=args.lr,
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 train_acc_list = []
 test_acc_list = []
-train_loss_list =[]
+train_loss_list = []
 # Training
 def train(epoch):
     print('\nEpoch: %d' % epoch)
@@ -87,6 +87,7 @@ def train(epoch):
 
         progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
+    global train_acc_list,train_loss_list
     train_acc_list.append(100.*correct/total)
     train_loss_list.append((train_loss/(batch_idx+1))
 
@@ -113,6 +114,7 @@ def test(epoch):
 
     # Save checkpoint.
     acc = 100.*correct/total
+    global test_acc_list
     test_acc_list.append(acc)
     if acc > best_acc:
         print('Saving..')
